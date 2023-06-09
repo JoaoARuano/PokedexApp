@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="2dp">
+
+    <!--<ImageView
+        android:id="@+id/poke_image"
+        android:layout_width="match_parent"
+        android:layout_height="198dp"
+        android:scaleType="centerCrop"
+        android:contentDescription="fazermais tarde"
+        tools:src="@mipmap/ic_teste_poke"/>-->
+
+    <TextView
+        android:id="@+id/poke_desc"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="8dp"
+        android:textAlignment="center"
+        android:layout_gravity="bottom|center_horizontal"
+        android:text="Teste teste teste"/>
+
+
+
+</com.google.android.material.card.MaterialCardView>
