@@ -1,5 +1,6 @@
 package com.example.pokedex.network
 
+import com.example.pokedex.model.PokemonDetailModel
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import retrofit2.Retrofit
@@ -23,10 +24,10 @@ interface PokeApiService {
     @GET("pokemon")
     suspend fun getPokemonList(
         @Query("offset") offset: Int, @Query("limit") limit: Int
-    ): PokemonList
+    ): PokemonRequest
 
     @GET("pokemon/{idOrName}")
-    suspend fun getPokemon(@Path("idOrName") idOrName: String): Pokemon
+    suspend fun getPokemon(@Path("idOrName") idOrName: String): PokemonDetailModel
 }
 
 object PokeApi {

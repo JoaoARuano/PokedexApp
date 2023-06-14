@@ -2,47 +2,58 @@ package com.example.pokedex.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.annotation.LayoutRes
+import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.example.pokedex.R
 import com.example.pokedex.databinding.GridViewPokeBinding
-import com.example.pokedex.network.Pokemon
+import com.example.pokedex.model.PokemonModel
 
-class PokeListAdapter : ListAdapter<ArrayList<Pokemon>, PokeListAdapter.PokeViewHolder>(DiffCallback) {
+class PokeListAdapter : RecyclerView.Adapter<PokeListAdapter.PokeViewHolder>() {
 
-    private val pokemonList = ArrayList<Pokemon>()
+    //var pokemonList = ArrayList<PokemonModel>()
+    var pokemonList: List<PokemonModel> = emptyList()
+        set(value) {
+            field = value
+            notifyDataSetChanged()
+        }
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
-    ): PokeListAdapter.PokeViewHolder {
-        return PokeViewHolder(GridViewPokeBinding.inflate(
-            LayoutInflater.from(parent.context)
-        ))
+    ): PokeViewHolder {
+        val withDataBinding: GridViewPokeBinding = DataBindingUtil.inflate(
+            LayoutInflater.from(parent.context),
+            PokeViewHolder.LAYOUT,
+            parent,
+            false
+        )
+        return PokeViewHolder(withDataBinding)
     }
 
-    override fun onBindViewHolder(holder: PokeListAdapter.PokeViewHolder, position: Int) {
-        holder.bind(pokemonList[position])
-    }
+    override fun getItemCount() = pokemonList.size
 
-    companion object DiffCallback : DiffUtil.ItemCallback<ArrayList<Pokemon>>() {
-        override fun areItemsTheSame(oldItem: ArrayList<Pokemon>, newItem: ArrayList<Pokemon>): Boolean {
-            TODO("Not yet implemented")
+    override fun onBindViewHolder(holder: PokeViewHolder, position: Int) {
+        holder.binding.also {
+            it.pokemon = pokemonList[position]
         }
-
-        override fun areContentsTheSame(oldItem: ArrayList<Pokemon>, newItem: ArrayList<Pokemon>): Boolean {
-            TODO("Not yet implemented")
-        }
+        /*val pokemon = getItem(position)
+        holder.bind(pokemon)*/
     }
 
-    class PokeViewHolder(private var binding: GridViewPokeBinding):
+    class PokeViewHolder(val binding: GridViewPokeBinding):
         RecyclerView.ViewHolder(binding.root){
-            fun bind(pokemon: Pokemon){
+        companion object{
+            @LayoutRes
+            val LAYOUT = R.layout.grid_view_poke
+        }
+            fun bind(pokemon: PokemonModel){
                 binding.apply {
                     pokeDesc.text = pokemon.name
+                    executePendingBindings()
                 }
             }
     }
-
-
 }

@@ -1,6 +1,6 @@
-package com.example.pokedex.network
+package com.example.pokedex.model
 
-data class PokemonDetails(
+data class PokemonDetailModel(
     val order: Int,
     val name: String,
     val height: Int,
@@ -10,7 +10,7 @@ data class PokemonDetails(
     //TODO: Image??
 )
 
-class Moves(
+data class Moves(
     val name: String
 )
 

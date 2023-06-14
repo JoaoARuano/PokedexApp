@@ -1,17 +1,20 @@
 package com.example.pokedex.viewmodel
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import com.example.pokedex.database.PokemonDatabase.Companion.getDatabase
 import com.example.pokedex.network.PokeApi
-import com.example.pokedex.network.Pokemon
+import com.example.pokedex.repository.PokeRepository
 import kotlinx.coroutines.launch
 
-class PokeListViewModel : ViewModel() {
+class PokeListViewModel(application: Application) : AndroidViewModel(application) {
 
-    private val _pokemonList = MutableLiveData<List<Pokemon>>()
-    val pokemonList: LiveData<List<Pokemon>> = _pokemonList
+    private val pokeRepository = PokeRepository(getDatabase(application))
+
+    val pokemons = pokeRepository.pokemons
 
     init {
         getPokemonList()
@@ -20,11 +23,22 @@ class PokeListViewModel : ViewModel() {
     private fun getPokemonList() {
         viewModelScope.launch {
             try {
-                _pokemonList.value = PokeApi.retrofitService.getPokemonList(20, 20).results
+                pokeRepository.refreshPokemon()
             } catch (e: Exception) {
                 //TODO: Error
-                e.printStackTrace()
+                if(pokemons.value.isNullOrEmpty())
+                    e.printStackTrace()
             }
+        }
+    }
+
+    class Factory(val app: Application) : ViewModelProvider.Factory {
+        override fun <T : ViewModel> create(modelClass: Class<T>): T {
+            if (modelClass.isAssignableFrom(PokeListViewModel::class.java)){
+                @Suppress("UNCHECKED_CAST")
+                return PokeListViewModel(app) as T
+            }
+            throw IllegalArgumentException("Unable to construct viewmodel")
         }
     }
 }
