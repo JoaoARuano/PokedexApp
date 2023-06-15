@@ -12,7 +12,6 @@ data class PokemonDetailsRequest(
     val weight: Int,
     val types: List<Types>,
     val moves: List<Moves>
-    //TODO: Image??
 )
 
 

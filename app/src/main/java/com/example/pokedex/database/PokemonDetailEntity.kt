@@ -12,8 +12,10 @@ data class PokemonDetailEntity (
     val name: String,
     val height: Int,
     val weight: Int,
-    //val types: List<String>,
+    //TODO: TypeConverter for the list
+    //@Embedded val types: List<String>,
     //@Embedded val moves: List<Moves>
+
     //TODO: Image??
 )
 
@@ -24,16 +26,3 @@ data class Moves (
 data class Types (
     val name: String
 )
-
-/*
-fun List<PokemonDetailEntity>.asDomainModel(): List<PokemonDetailModel> {
-    return map {
-        PokemonDetailModel(
-            order = it.order,
-            name = it.name,
-            height = it.height,
-            weight = it.weight,
-            types = List<Types>,
-            moves = it.moves)
-    }
-}*/

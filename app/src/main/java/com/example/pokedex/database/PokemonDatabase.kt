@@ -7,30 +7,25 @@ import androidx.room.RoomDatabase
 
 @Database(
     entities = [PokemonEntity::class, PokemonDetailEntity::class],
-    version = 1,
+    version = 2,
     exportSchema = false
 )
 abstract class PokemonDatabase : RoomDatabase() {
+    abstract fun getPokemonDao(): PokemonDao
+    abstract fun getPokemonDetailDao(): PokemonDetailDao
+}
 
-    abstract fun getPokemonDao() : PokemonDao
-    abstract fun getPokemonDetailDao() : PokemonDetailDao
+private lateinit var INSTANCE: PokemonDatabase
 
-    companion object {
-        @Volatile
-        private var INSTANCE: PokemonDatabase? = null
-
-        fun getDatabase(context: Context): PokemonDatabase {
-            return INSTANCE ?: synchronized(this) {
-                val instance = Room.databaseBuilder(
-                    context,
-                    PokemonDatabase::class.java,
-                    "pokemon_database")
-                    .build()
-                INSTANCE = instance
-
-                instance
-            }
+fun getDatabase(context: Context): PokemonDatabase {
+    synchronized(PokemonDatabase::class.java) {
+        if (!::INSTANCE.isInitialized) {
+            INSTANCE = Room.databaseBuilder(
+                context.applicationContext,
+                PokemonDatabase::class.java,
+                "pokemon_databse"
+            ).build()
         }
-
+        return INSTANCE
     }
 }

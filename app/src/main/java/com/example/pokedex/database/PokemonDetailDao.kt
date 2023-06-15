@@ -6,8 +6,6 @@ import androidx.room.OnConflictStrategy
 
 @Dao
 interface PokemonDetailDao {
-
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(pokemon: PokemonDetailEntity)
-
 }

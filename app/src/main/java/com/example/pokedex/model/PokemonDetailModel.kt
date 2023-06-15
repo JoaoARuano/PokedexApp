@@ -7,6 +7,7 @@ data class PokemonDetailModel(
     val weight: Int,
     val types: List<Types>,
     val moves: List<Moves>
+
     //TODO: Image??
 )
 

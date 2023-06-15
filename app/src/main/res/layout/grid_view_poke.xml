@@ -31,7 +31,7 @@
             android:padding="8dp"
             android:text="@{pokemon.name}"
             android:textAlignment="center"
-            tools:text="Teste" />
+            tools:text="Teste"/>
 
     </com.google.android.material.card.MaterialCardView>
 </layout>

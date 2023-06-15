@@ -5,8 +5,8 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import com.example.pokedex.database.PokemonDatabase.Companion.getDatabase
-import com.example.pokedex.network.PokeApi
+import com.example.pokedex.database.getDatabase
+import com.example.pokedex.model.PokemonModel
 import com.example.pokedex.repository.PokeRepository
 import kotlinx.coroutines.launch
 
@@ -32,13 +32,7 @@ class PokeListViewModel(application: Application) : AndroidViewModel(application
         }
     }
 
-    class Factory(val app: Application) : ViewModelProvider.Factory {
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            if (modelClass.isAssignableFrom(PokeListViewModel::class.java)){
-                @Suppress("UNCHECKED_CAST")
-                return PokeListViewModel(app) as T
-            }
-            throw IllegalArgumentException("Unable to construct viewmodel")
-        }
+    fun displayPokemonDetails(pokemonModel: PokemonModel){
+        //TODO open Pokemon Detail
     }
 }

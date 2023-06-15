@@ -1,7 +1,7 @@
 package com.example.pokedex.repository
 
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.Transformations
+import androidx.lifecycle.map
 import com.example.pokedex.database.PokemonDatabase
 import com.example.pokedex.database.asDomainModel
 import com.example.pokedex.model.PokemonModel
@@ -12,7 +12,7 @@ import kotlinx.coroutines.withContext
 
 class PokeRepository(private val db: PokemonDatabase) {
 
-    val pokemons: LiveData<List<PokemonModel>> = Transformations.map(db.getPokemonDao().getAllPokemons()){
+    val pokemons: LiveData<List<PokemonModel>> = db.getPokemonDao().getAllPokemons().map {
         it.asDomainModel()
     }
 

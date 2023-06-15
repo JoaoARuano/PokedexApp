@@ -2,58 +2,48 @@ package com.example.pokedex.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.annotation.LayoutRes
-import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.example.pokedex.R
 import com.example.pokedex.databinding.GridViewPokeBinding
 import com.example.pokedex.model.PokemonModel
 
-class PokeListAdapter : RecyclerView.Adapter<PokeListAdapter.PokeViewHolder>() {
-
-    //var pokemonList = ArrayList<PokemonModel>()
-    var pokemonList: List<PokemonModel> = emptyList()
-        set(value) {
-            field = value
-            notifyDataSetChanged()
-        }
+class PokeListAdapter( val onClickListener: OnClickListener) :
+    ListAdapter<PokemonModel, PokeListAdapter.PokeViewHolder>(DiffCallback) {
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
     ): PokeViewHolder {
-        val withDataBinding: GridViewPokeBinding = DataBindingUtil.inflate(
-            LayoutInflater.from(parent.context),
-            PokeViewHolder.LAYOUT,
-            parent,
-            false
-        )
-        return PokeViewHolder(withDataBinding)
+        return PokeViewHolder(GridViewPokeBinding.inflate(LayoutInflater.from(parent.context)))
     }
 
-    override fun getItemCount() = pokemonList.size
-
     override fun onBindViewHolder(holder: PokeViewHolder, position: Int) {
-        holder.binding.also {
-            it.pokemon = pokemonList[position]
+        val pokemonRequest = getItem(position)
+        holder.itemView.setOnClickListener {
+            onClickListener.onClick(pokemonRequest)
         }
-        /*val pokemon = getItem(position)
-        holder.bind(pokemon)*/
+        holder.bind(pokemonRequest)
     }
 
     class PokeViewHolder(val binding: GridViewPokeBinding):
-        RecyclerView.ViewHolder(binding.root){
-        companion object{
-            @LayoutRes
-            val LAYOUT = R.layout.grid_view_poke
+        RecyclerView.ViewHolder(binding.root) {
+        fun bind(pokemonModel: PokemonModel) {
+            binding.pokemon = pokemonModel
+            binding.executePendingBindings()
         }
-            fun bind(pokemon: PokemonModel){
-                binding.apply {
-                    pokeDesc.text = pokemon.name
-                    executePendingBindings()
-                }
-            }
+    }
+
+    companion object DiffCallback : DiffUtil.ItemCallback<PokemonModel>() {
+        override fun areItemsTheSame(oldItem: PokemonModel, newItem: PokemonModel): Boolean {
+            return oldItem === newItem
+        }
+        override fun areContentsTheSame(oldItem: PokemonModel, newItem: PokemonModel): Boolean {
+            return oldItem.name == newItem.name
+        }
+    }
+
+    class OnClickListener(val clickListener: (pokemonModel: PokemonModel) -> Unit) {
+        fun onClick(pokemonModel: PokemonModel) = clickListener(pokemonModel)
     }
 }
