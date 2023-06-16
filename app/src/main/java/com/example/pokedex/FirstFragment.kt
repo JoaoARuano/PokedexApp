@@ -1,6 +1,7 @@
 package com.example.pokedex
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -16,6 +17,7 @@ import com.example.pokedex.adapter.PokeListAdapter
 import com.example.pokedex.databinding.FragmentFirstBinding
 import com.example.pokedex.databinding.FragmentSecondBinding
 import com.example.pokedex.model.PokemonModel
+import com.example.pokedex.network.PokeApi
 import com.example.pokedex.viewmodel.PokeListViewModel
 
 /**
@@ -23,26 +25,33 @@ import com.example.pokedex.viewmodel.PokeListViewModel
  */
 class FirstFragment : Fragment() {
 
-    private val viewModel: PokeListViewModel by lazy {
-        ViewModelProvider(this)
-            .get(PokeListViewModel::class.java)
-    }
+    private val TAG: String = FirstFragment::class.java.simpleName
+
+    private var _binding: FragmentFirstBinding? = null
+    private val binding get() = _binding!!
+
+    private val viewModel: PokeListViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        _binding = FragmentFirstBinding.inflate(inflater, container, false)
 
-        val binding = FragmentFirstBinding.inflate(inflater)
+        binding.lifecycleOwner = this
 
-        binding.lifecycleOwner = viewLifecycleOwner
+        val adapter = PokeListAdapter()
 
-        val viewModel = viewModel
+        binding.pokeGrid.adapter = adapter
 
-        binding.pokeGrid.adapter = PokeListAdapter(PokeListAdapter.OnClickListener{
-            viewModel.displayPokemonDetails(it)
+        binding.pokeGrid
+
+        viewModel.pokemonList.observe(viewLifecycleOwner, Observer {
+            it?.let {
+                adapter.submitList(it)
+                Log.d(TAG, "List size frag: " + it.size.toString())
+            }
         })
-
 
         return binding.root
     }

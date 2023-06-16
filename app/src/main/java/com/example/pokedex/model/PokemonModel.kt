@@ -1,7 +1,9 @@
 package com.example.pokedex.model
 
+import com.squareup.moshi.Json
+
 data class PokemonModel(
-    val name: String,
+    @Json(name = "name") var name: String,
     val url: String
 ){
     fun getImageUrl() : String{

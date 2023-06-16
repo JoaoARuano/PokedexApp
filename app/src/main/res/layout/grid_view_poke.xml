@@ -15,13 +15,14 @@
         android:layout_height="wrap_content"
         android:layout_margin="2dp">
 
-        <!--<ImageView
+        <ImageView
             android:id="@+id/poke_image"
             android:layout_width="match_parent"
             android:layout_height="198dp"
             android:scaleType="centerCrop"
             android:contentDescription="fazermais tarde"
-            tools:src="@mipmap/ic_teste_poke"/>-->
+            android:src="@mipmap/ic_teste_poke"
+            tools:src="@mipmap/ic_teste_poke"/>
 
         <TextView
             android:id="@+id/poke_desc"
@@ -29,7 +30,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|center_horizontal"
             android:padding="8dp"
-            android:text="@{pokemon.name}"
+            android:text="@{pokemon.name.toString()}"
             android:textAlignment="center"
             tools:text="Teste"/>
 

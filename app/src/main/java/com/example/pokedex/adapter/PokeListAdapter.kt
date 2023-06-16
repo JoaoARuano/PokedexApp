@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.pokedex.databinding.GridViewPokeBinding
 import com.example.pokedex.model.PokemonModel
 
-class PokeListAdapter( val onClickListener: OnClickListener) :
+class PokeListAdapter() :
     ListAdapter<PokemonModel, PokeListAdapter.PokeViewHolder>(DiffCallback) {
 
     override fun onCreateViewHolder(
@@ -21,7 +21,7 @@ class PokeListAdapter( val onClickListener: OnClickListener) :
     override fun onBindViewHolder(holder: PokeViewHolder, position: Int) {
         val pokemonRequest = getItem(position)
         holder.itemView.setOnClickListener {
-            onClickListener.onClick(pokemonRequest)
+            //onClickListener.onClick(pokemonRequest)
         }
         holder.bind(pokemonRequest)
     }
