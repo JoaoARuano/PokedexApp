@@ -6,6 +6,8 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.core.os.bundleOf
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
@@ -40,7 +42,9 @@ class FirstFragment : Fragment() {
 
         binding.lifecycleOwner = this
 
-        val adapter = PokeListAdapter()
+        val adapter = PokeListAdapter(PokeListAdapter.OnClickListener {
+            viewModel.displayPokemonDetails(it)
+        })
 
         binding.pokeGrid.adapter = adapter
 
@@ -58,8 +62,12 @@ class FirstFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        /*binding.buttonFirst.setOnClickListener {
-            findNavController().navigate(R.id.action_FirstFragment_to_SecondFragment)
-        }*/
+
+        viewModel.navigateToSelectedPokemon.observe(viewLifecycleOwner, Observer {
+            if (null != it){
+                //this.findNavController().navigate(FirstFragmentDirections.actionFirstFragmentToSecondFragment(it))
+                this.findNavController().navigate(FirstFragmentDirections.actionFirstFragmentToSecondFragment(it.getId()))
+            }
+        })
     }
 }

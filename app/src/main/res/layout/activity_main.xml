@@ -23,8 +23,6 @@
             android:layout_height="wrap_content"
             android:hint="Search Pokémon" />
 
-        <include layout="@layout/content_main" />
-
     </com.google.android.material.appbar.AppBarLayout>
 
     <include layout="@layout/content_main" />

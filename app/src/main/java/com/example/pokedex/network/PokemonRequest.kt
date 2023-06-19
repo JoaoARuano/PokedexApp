@@ -1,6 +1,5 @@
 package com.example.pokedex.network
 
-import com.example.pokedex.database.PokemonEntity
 import com.example.pokedex.model.PokemonModel
 
 data class PokemonRequest(
@@ -9,12 +8,3 @@ data class PokemonRequest(
     val previous: String,
     val results: List<PokemonModel>
 )
-
-fun List<PokemonModel>.asDatabaseModel(): List<PokemonEntity>{
-    return map {
-        PokemonEntity(
-            name = it.name,
-            url = it.url
-        )
-    }
-}

@@ -2,13 +2,18 @@ package com.example.pokedex.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.ImageView
+import androidx.core.net.toUri
+import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.pokedex.databinding.GridViewPokeBinding
 import com.example.pokedex.model.PokemonModel
+import kotlinx.coroutines.NonDisposableHandle.parent
 
-class PokeListAdapter() :
+class PokeListAdapter(val clickListener: OnClickListener) :
     ListAdapter<PokemonModel, PokeListAdapter.PokeViewHolder>(DiffCallback) {
 
     override fun onCreateViewHolder(
@@ -20,16 +25,14 @@ class PokeListAdapter() :
 
     override fun onBindViewHolder(holder: PokeViewHolder, position: Int) {
         val pokemonRequest = getItem(position)
-        holder.itemView.setOnClickListener {
-            //onClickListener.onClick(pokemonRequest)
-        }
-        holder.bind(pokemonRequest)
+        holder.bind(pokemonRequest!!, clickListener)
     }
 
     class PokeViewHolder(val binding: GridViewPokeBinding):
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(pokemonModel: PokemonModel) {
+        fun bind(pokemonModel: PokemonModel, clickListener: OnClickListener) {
             binding.pokemon = pokemonModel
+            binding.clickListener = clickListener
             binding.executePendingBindings()
         }
     }
@@ -45,5 +48,15 @@ class PokeListAdapter() :
 
     class OnClickListener(val clickListener: (pokemonModel: PokemonModel) -> Unit) {
         fun onClick(pokemonModel: PokemonModel) = clickListener(pokemonModel)
+    }
+}
+
+@BindingAdapter("imageUrl")
+fun bindImage(imgView: ImageView, imgUrl: String?){
+    imgUrl?.let {
+        val imgUri = imgUrl.toUri().buildUpon().scheme("https").build()
+        Glide.with(imgView.context)
+            .load(imgUri)
+            .into(imgView)
     }
 }
